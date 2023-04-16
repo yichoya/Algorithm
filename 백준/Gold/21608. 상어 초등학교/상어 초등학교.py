@@ -26,23 +26,12 @@ for i in range(n ** 2):
                             friend += 1
                         if seat[nr][nc] == 0:
                             blank += 1
-                if tmpFriend < friend:
+                
+                if tmpFriend < friend or (tmpFriend == friend and tmpBlank < blank):
                     tmpFriend = friend
                     tmpBlank = blank
                     tmpR = r
                     tmpC = c
-                elif tmpFriend == friend:
-                    if tmpBlank < blank:
-                        tmpBlank = blank
-                        tmpR = r
-                        tmpC = c
-                    elif tmpBlank == blank:
-                        if tmpR > r:
-                            tmpR = r
-                            tmpC = c
-                        elif tmpR == r:
-                            if tmpC > c:
-                                tmpC = c
     seat[tmpR][tmpC] = student
 
 students.sort()
@@ -59,3 +48,5 @@ for i in range(n):
         if score > 0:
             res += 10 ** (score - 1)
 print(res)
+
+                
