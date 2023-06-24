@@ -1,27 +1,26 @@
 while(1):
-    str_val = input()
-    if str_val =='.':
+    string = input()
+    if string == ".":
         break
-        
+
     stack = []
-    result = True
-    
-    for el in str_val:
-        if el == '(' or el =='[':
-            stack.append(el)
-        elif el==')':
-            if len(stack)==0 or stack[-1]=='[':
-                result = False
+    res = True
+    for s in string:
+        if s == "(" or s == "[":
+            stack.append(s)
+        elif s == ")":
+            if len(stack)==0 or stack[-1]=="[":
+                res = False
                 break
-            elif stack[-1] == '(':
+            elif stack[-1] == "(":
                 stack.pop()
-        elif el==']':
-            if len(stack)==0 or stack[-1]=='(':
-                result = False
+        elif s == "]":
+            if len(stack)==0 or stack[-1]=="(":
+                res = False
                 break
-            elif stack[-1] == '[':
+            elif stack[-1] == "[":
                 stack.pop()
-    if len(stack)==0 and result==True:
-        print('yes')
+    if len(stack) == 0 and res == True:
+        print("yes")
     else:
-        print('no')
+        print("no")
