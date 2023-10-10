@@ -16,9 +16,10 @@ for i in range(N):
 
 q = deque()
 q.append((redX, redY, blueX, blueY, 0))
- 
+
+# 왜 BLUE도 방문처리를 해야되는걸가 .........
 visited = [[[[0 for _ in range(M)] for _ in range(N)] for _ in range(M)] for _ in range(N)]
-visited[redX][redY][blueX][blueY] = 1 # 방문처리
+visited[redX][redY][blueX][blueY] = 1
  
 dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
@@ -26,58 +27,61 @@ dy = [0, 0, -1, 1]
 def bfs():
     while q:
         redX, redY, blueX, blueY, cnt = q.popleft()
-        
-        if (cnt > 10):
-            break 
-    
+
         if board[redX][redY] == 'O':
             print(1)
             return
+
+        if (cnt > 10):
+            break 
         
         for i in range(4):
             # RED
-            redNX, redNY = redX, redY
+            nRedX, nRedY = redX, redY
             while True:
-                redNX += dx[i]
-                redNY += dy[i]
-                # 탈출조건1 - 벽
-                if board[redNX][redNY] == '#':
-                    redNX -= dx[i]
-                    redNY -= dy[i]
+                nRedX += dx[i]
+                nRedY += dy[i]
+
+                if board[nRedX][nRedY] == '#':
+                    nRedX -= dx[i]
+                    nRedY -= dy[i]
                     break
-                # 탈출조건2 - 구멍
-                if board[redNX][redNY] == 'O':
+
+                if board[nRedX][nRedY] == 'O':
+                    # print(1)
+                    # return
                     break
             
             # BLUE
-            blueNX, blueNY = blueX, blueY
+            nBlueX, nBlueY = blueX, blueY
             while True:
-                blueNX += dx[i]
-                blueNY += dy[i]
-                # 탈출조건1 - 벽
-                if board[blueNX][blueNY] == '#':
-                    blueNX -= dx[i]
-                    blueNY -= dy[i]
+                nBlueX += dx[i]
+                nBlueY += dy[i]
+
+                if board[nBlueX][nBlueY] == '#':
+                    nBlueX -= dx[i]
+                    nBlueY -= dy[i]
                     break
-                # 탈출조건2 - 구멍
-                if board[blueNX][blueNY] == 'O':
-                    break
+
+                if board[nBlueX][nBlueY] == 'O': break
+
+            # BLUE 탈출하면 끝
+            if board[nBlueX][nBlueY] == 'O': continue
             
-            # Blue가 구멍에 들어가면 끝
-            if board[blueNX][blueNY] == 'O': continue
-            
-            # BLUE와 RED가 같은 위치라면 더 멀리서 온 것을 뒤로 빼야한다.
-            if (redNX == blueNX and redNY == blueNY):
-                if( abs(redNX - redX) + abs(redNY - redY) > abs(blueNX - blueX) + abs(blueNY - blueY) ):
-                    redNX -= dx[i]
-                    redNY -= dy[i]
+            # RED, BLUE 위치가 같을 때 ???
+            if (nRedX == nBlueX and nRedY == nBlueY):
+                if( abs(nRedX - redX) + abs(nRedY - redY) > abs(nBlueX - blueX) + abs(nBlueY - blueY) ):
+                    nRedX -= dx[i]
+                    nRedY -= dy[i]
                 else:
-                    blueNX -= dx[i]
-                    blueNY -= dy[i]
-            
-            if visited[redNX][redNY][blueNX][blueNY] == 0:
-                q.append((redNX, redNY, blueNX, blueNY, cnt+1))
-                visited[redNX][redNY][blueNX][blueNY] = 1 # 방문처리    
+                    nBlueX -= dx[i]
+                    nBlueY -= dy[i]
+
+
+            if visited[nRedX][nRedY][nBlueX][nBlueY] == 0:
+                q.append((nRedX, nRedY, nBlueX, nBlueY, cnt+1))
+                visited[nRedX][nRedY][nBlueX][nBlueY] = 1
+
     print(0)
- 
+
 bfs()
