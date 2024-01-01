@@ -1,11 +1,14 @@
-import sys
+import sys, itertools
+input = sys.stdin.readline
 
-board = []
-N = int(sys.stdin.readline())
-for _ in range(N):
-    Ax, Ay = map(int, sys.stdin.readline().split())
-    Bx, By = Ax + 10, Ay + 10
-    for i in range(Ax, Bx):
-        for j in range(Ay, By):
-            board.append((i,j))
-print(len(set(board)))
+white = [[0] * 101 for _ in range(101)]
+n = int(input())
+cnt = 0
+for _ in range(n):
+    x, y = map(int, input().split())
+    for a in range(x, x + 10):
+        for b in range(y, y + 10):
+            if white[a][b] == 0:
+                white[a][b] = 1
+                cnt += 1
+print(cnt)
