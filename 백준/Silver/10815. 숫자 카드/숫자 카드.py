@@ -1,12 +1,11 @@
 import sys
-
-N = int(sys.stdin.readline())
-cards = list(map(int, sys.stdin.readline().split()))
-M = int(sys.stdin.readline())
-arr = list(map(int, sys.stdin.readline().split()))
+input = sys.stdin.readline
+N = int(input())
+cards = list(map(int, input().split()))
+M = int(input())
+arr = list(map(int, input().split()))
 
 cards.sort()
-
 for i in arr:
     start = 0
     end = N - 1
