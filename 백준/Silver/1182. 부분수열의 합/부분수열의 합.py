@@ -1,17 +1,17 @@
 import sys
 input = sys.stdin.readline
-N, S = map(int, input().split())
+n, s = map(int, input().split())
 num = list(map(int, input().split()))
 cnt = 0
-ans = []
+select = []
 
 def recur(start):
     global cnt
-    if sum(ans) == S and len(ans) > 0:
+    if sum(select) == s and len(select) > 0:
         cnt += 1
-    for i in range(start, N):
-        ans.append(num[i])
-        recur(i+1)
-        ans.pop()
+    for i in range(start, n):
+        select.append(num[i])
+        recur(i + 1)
+        select.pop()
 recur(0)
 print(cnt)
