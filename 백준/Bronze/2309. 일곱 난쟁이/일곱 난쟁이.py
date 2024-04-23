@@ -1,16 +1,14 @@
-import sys
-from itertools import combinations
+import sys, itertools
+input = sys.stdin.readline
 
 dwarves = []
-for _ in range(9):
-    d =  int(sys.stdin.readline())
-    dwarves.append(d)
+for i in range(9):
+    dwarves.append(int(input()))
+dwarves.sort()
 
-check = list(combinations(dwarves, 7))
-for c in check:
+combs = itertools.combinations(dwarves, 7)
+for c in combs:
     if sum(c) == 100:
-        c = list(c)
-        c.sort()
-        for i in c:
-            print(i)
+        for tmp in c:
+            print(tmp)
         break
