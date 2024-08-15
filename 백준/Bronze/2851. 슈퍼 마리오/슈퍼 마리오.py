@@ -1,10 +1,6 @@
-import sys, itertools
-input = sys.stdin.readline
+import sys
 
-mushrooms = []
-for _ in range(10):
-    mushrooms.append(int(input().rstrip()))
-
+mushrooms = [int(sys.stdin.readline().rstrip()) for _ in range(10)]
 score = 0
 minScore = 101
 maxScore = -101
