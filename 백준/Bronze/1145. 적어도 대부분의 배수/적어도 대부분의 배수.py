@@ -1,12 +1,11 @@
 import sys
-input = sys.stdin.readline
 
-nums = list(map(int, input().split()))
+nums = list(map(int, sys.stdin.readline().split()))
 for i in range(1, 1000001):
-    check = 0
+    cnt = 0
     for n in nums:
         if i % n == 0:
-            check += 1
-    if check >= 3:
+            cnt += 1
+    if cnt >= 3:
         print(i)
         break
