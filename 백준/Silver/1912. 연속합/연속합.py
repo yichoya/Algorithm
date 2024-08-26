@@ -1,20 +1,14 @@
 import sys
-input = sys.stdin.readline
-n = int(input().rstrip())
-li = list(map(int, input().rstrip().split()))
+n = int(sys.stdin.readline())
+nums = [0] + list(map(int, sys.stdin.readline().split()))
 
-sum_arr = [0] * n
-ans = li[0]
-sum_arr[0] = li[0]
-min_value = li[0]
+ans = -1e9
+prefix_sum = [0] * (n + 1)
+min_prefix_sum = 0
 
-for i in range(1, n):
-    sum_arr[i] = sum_arr[i - 1] + li[i]
-
-    if min_value > sum_arr[i]:
-        min_value = sum_arr[i]
-    else:
-        ans = max(ans, sum_arr[i] - min_value, sum_arr[i], li[i])
-    ans = max(ans, sum_arr[i], li[i])
+for i in range(1, n + 1):
+    prefix_sum[i] = prefix_sum[i - 1] + nums[i]
+    ans = max(ans, prefix_sum[i] - min_prefix_sum)
+    min_prefix_sum = min(min_prefix_sum, prefix_sum[i])
 
 print(ans)
