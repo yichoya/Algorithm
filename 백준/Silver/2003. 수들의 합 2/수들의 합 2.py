@@ -1,22 +1,22 @@
 import sys
-input = sys.stdin.readline
 
-n, m = map(int, input().split())
-nums = list(map(int, input().split()))
+n, m = map(int, sys.stdin.readline().split())
+nums = list(map(int, sys.stdin.readline().split()))
+
 start, end = 0, 0
-cnt = 0
-tmp = nums[start]
-while 1:
-    if tmp < m:
+res, cnt = nums[start], 0
+while(end < n):
+    if res < m:
         end += 1
         if end >= n:
             break
-        tmp += nums[end]
-    elif tmp > m:
-        tmp -= nums[start]
+        res += nums[end]
+    elif res > m:
+        res -= nums[start]
         start += 1
     else:
         cnt += 1
-        tmp -= nums[start]
+        res -= nums[start]
         start += 1
+
 print(cnt)
