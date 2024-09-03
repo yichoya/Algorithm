@@ -1,9 +1,7 @@
 import sys
-input = sys.stdin.readline
-
-n, m = map(int, input().split())
-a = list(map(int, input().split()))
-b = list(map(int, input().split()))
+n, m = map(int, sys.stdin.readline().split())
+a = list(map(int, sys.stdin.readline().split()))
+b = list(map(int, sys.stdin.readline().split()))
 res = a + b
 res.sort()
 print(' '.join(map(str, res)))
