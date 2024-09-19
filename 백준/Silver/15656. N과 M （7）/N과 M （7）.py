@@ -1,15 +1,14 @@
 import sys
-input = sys.stdin.readline
-n, m = map(int, input().split())
-arr = list(map(int, input().split()))
-arr.sort()
+n, m = map(int, sys.stdin.readline().split())
+nums = list(map(int, sys.stdin.readline().split()))
+nums.sort()
 select = []
 def recur():
     if len(select) == m:
         print(*select)
         return
-    for i in arr:
-        select.append(i)
+    for i in range(n):
+        select.append(nums[i])
         recur()
         select.pop()
 recur()
