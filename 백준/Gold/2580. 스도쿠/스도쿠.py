@@ -1,47 +1,49 @@
 import sys
+sys.setrecursionlimit(10 ** 6)
 
-sudoku = []
-zero = []
-
+board = []
+blank = []
 for i in range(9):
-    tmp = list(map(int, sys.stdin.readline().rstrip().split()))
-    sudoku.append(tmp)
+    tmp = list(map(int, sys.stdin.readline().split()))
     for j in range(9):
-        if sudoku[i][j] == 0:
-            zero.append([i, j])
+        if tmp[j] == 0:
+            blank.append((i, j))
+    board.append(tmp)
 
-def checkRowCol(x, y, num):
-    for i in range(9):
-        if sudoku[x][i] == num: return False
-        if sudoku[i][y] == num: return False
+# 숫자 사용 여부를 기록하는 배열
+row_check = [[False] * 10 for _ in range(9)]
+col_check = [[False] * 10 for _ in range(9)]
+square_check = [[False] * 10 for _ in range(9)]
 
-    return True
+# 초기 값 설정 (미리 채워진 숫자에 대해 체크)
+for i in range(9):
+    for j in range(9):
+        if board[i][j] != 0:
+            num = board[i][j]
+            row_check[i][num] = True
+            col_check[j][num] = True
+            square_check[(i // 3) * 3 + (j // 3)][num] = True
 
-def checkAround(x, y, num):
-    nx = x // 3 * 3
-    ny = y // 3 * 3
+def recur(start):
+    if start == len(blank):
+        for i in range(9):
+            print(*board[i])
+        return True
 
-    for i in range(3):
-        for j in range(3):
-            if sudoku[nx + i][ny + j] == num:
-                return False
-    return True
+    x, y = blank[start]
+    square_idx = (x // 3) * 3 + (y // 3)
+    for num in range(1, 10):
+        if not row_check[x][num] and not col_check[y][num] and not square_check[square_idx][num]:
+            board[x][y] = num
+            row_check[x][num] = col_check[y][num] = square_check[square_idx][num] = True
 
-def dfs(cnt):
-    if cnt == len(zero):
-        for j in range(9):
-            #print(*sudoku[i])
-            print(" ".join(map(str, sudoku[j])))
-        exit(0)
+            # 다음 단계 재귀
+            if recur(start + 1):
+                return True
 
-    # 1~9 넣으면서 확인
-    for i in range(1, 10):
-        x = zero[cnt][0]
-        y = zero[cnt][1]
+            board[x][y] = 0
+            row_check[x][num] = col_check[y][num] = square_check[square_idx][num] = False
+    return False
 
-        if checkAround(x, y, i) and checkRowCol(x, y, i):
-            sudoku[x][y] = i
-            dfs(cnt + 1)
-            sudoku[x][y] = 0
-
-dfs(0)
+# 스도쿠 풀이 시작
+recur(0)
