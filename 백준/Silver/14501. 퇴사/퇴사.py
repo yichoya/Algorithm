@@ -1,16 +1,18 @@
-N = int(input())
-a = [list(map(int, input().split())) for _ in range(N)]
-ans = 0
-
-def dfs(day, tmp):
+import sys
+def recur(cur, total):
     global ans
-    if day == N:
-        if ans < tmp:
-            ans = tmp
+    if cur == n:
+        ans = max(ans, total)
         return
-    dfs(day+1, tmp)
-    if day + a[day][0] <= N:
-        dfs(day+a[day][0], tmp + a[day][1])
+    if cur > n:
+        return
 
-dfs(0, 0)
+    recur(cur + li[cur][0], total + li[cur][1])
+    recur(cur + 1, total)
+
+
+n = int(sys.stdin.readline())
+li = list(list(map(int, sys.stdin.readline().split())) for _ in range(n))
+ans = 0
+recur(0, 0)
 print(ans)
