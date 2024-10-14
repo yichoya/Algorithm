@@ -1,12 +1,21 @@
 import sys
-n = int(input())
-rgb = []
-for _ in range(n):
-    rgb.append(list(map(int, input().strip().split())))
+sys.setrecursionlimit(10**6)
+n = int(sys.stdin.readline())
+rgb = [list(map(int, sys.stdin.readline().split())) for _ in range(n)]
+dp = [[-1] * 3 for _ in range(n)]
 
-for i in range(1, n):
-    rgb[i][0] = min(rgb[i - 1][1], rgb[i - 1][2]) + rgb[i][0]
-    rgb[i][1] = min(rgb[i - 1][0], rgb[i - 1][2]) + rgb[i][1]
-    rgb[i][2] = min(rgb[i - 1][0], rgb[i - 1][1]) + rgb[i][2]
+def recur(cur, prev):    # 현재 집에서 선택할 수 있는 최소 비용 리턴
 
-print(min(rgb[n - 1]))
+    if cur == n:
+        return 0
+    if dp[cur][prev] != -1:
+        return dp[cur][prev]
+
+    res = 1234567890
+    for i in range(3):
+        if prev != i:
+            res = min(res, recur(cur + 1, i) + rgb[cur][i])
+    dp[cur][prev] = res
+    return dp[cur][prev]
+
+print(recur(0, -1))
