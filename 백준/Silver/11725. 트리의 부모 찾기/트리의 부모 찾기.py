@@ -1,27 +1,20 @@
 import sys
-from collections import deque
-
-N = int(sys.stdin.readline())
-graph = [[] for i in range(N+1)]
-for _ in range(N-1):
+sys.setrecursionlimit(10**6)
+n = int(sys.stdin.readline())
+gragh = [[] for _ in range(n + 1)]
+parent = [0] * (n + 1)
+for _ in range(n - 1):
     a, b = map(int, sys.stdin.readline().split())
-    graph[a].append(b)
-    graph[b].append(a)
+    gragh[a].append(b)
+    gragh[b].append(a)
 
-queue = deque()
-queue.append(1)
+def dfs(cur, prev):
+    parent[cur] = prev
+    for nxt in gragh[cur]:
+        if nxt == prev:
+            continue
+        dfs(nxt, cur)
 
-ans = [0]*(N+1)
-
-def bfs():
-    while queue:
-        now = queue.popleft()
-        for next in graph[now]:
-            if ans[next] == 0:
-                ans[next] = now
-                queue.append(next)
-
-bfs()
-res = ans[2:]
-for x in res:
-    print(x)
+dfs(1, 0)
+for i in range(2, n + 1):
+    print(parent[i])
