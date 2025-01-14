@@ -3,18 +3,21 @@ import sys
 n = int(sys.stdin.readline())
 data = [list(map(int, sys.stdin.readline().split())) for _ in range(n)]
 data.sort(key=lambda x: x[0])
-res = 0
+dp = [[-1] * (10001) for _ in range(n)]
 
-def recur(cur, end, total):
-    global res
+def recur(cur, end):
 
     if cur == n:
-        res = max(res, total)
-        return
+        return 0
 
+    if dp[cur][end] != -1:
+        return dp[cur][end]
+
+    tmp1 = 0
     if end <= data[cur][0]:
-        recur(cur + 1, data[cur][1], total + data[cur][2])
-    recur(cur + 1, end, total)
+        tmp1 = recur(cur + 1, data[cur][1]) + data[cur][2]
+    tmp2 = recur(cur + 1, end)
+    dp[cur][end] = max(tmp1, tmp2)
+    return dp[cur][end]
 
-recur(0, 0, 0)
-print(res)
+print(recur(0, 0))
