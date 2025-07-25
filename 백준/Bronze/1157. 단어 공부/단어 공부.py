@@ -1,14 +1,12 @@
 word = input().upper()
-check = list(set(word))
+cnt = [0] * 27
+# A = 65
+for ch in word:
+    idx = ord(ch) - ord('A')
+    cnt[idx] += 1
 
-total = []
-
-for i in check:
-    if i in word:
-        tmp = word.count(i)
-        total.append(tmp)
-
-M = max(total)
-if M >= 2 and total.count(M) >= 2:
-    print('?')
-else: print(check[total.index(M)])
+max_cnt = max(cnt)
+if cnt.count(max_cnt) > 1:
+    print("?")
+else:
+    print(chr(cnt.index(max_cnt) + ord('A')))
