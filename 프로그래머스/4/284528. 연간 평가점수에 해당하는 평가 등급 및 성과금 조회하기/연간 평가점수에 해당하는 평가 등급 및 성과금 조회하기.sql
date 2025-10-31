@@ -1,14 +1,32 @@
-SELECT E.EMP_NO, E.EMP_NAME, CASE WHEN AVG(G.SCORE) >= 96 THEN 'S'
-                                WHEN AVG(G.SCORE) >= 90 THEN 'A'
-                                WHEN AVG(G.SCORE) >= 80 THEN 'B'
-                                ELSE 'C'
-                                END GRADE,
-                            CASE WHEN AVG(G.SCORE) >= 96 THEN E.SAL * 0.2
-                                WHEN AVG(G.SCORE) >= 90 THEN E.SAL * 0.15
-                                WHEN AVG(G.SCORE) >= 80 THEN E.SAL * 0.1
-                                ELSE 0
-                                END BONUS
-FROM HR_EMPLOYEES E JOIN HR_GRADE G ON E.EMP_NO = G.EMP_NO
-GROUP BY E.EMP_NO
-ORDER BY E.EMP_NO
-                    
+WITH AVG_SCORE_TABLE AS (
+    SELECT EMP_NO, AVG(SCORE) as AVG_SCORE
+    FROM HR_GRADE
+    GROUP BY EMP_NO
+),
+
+HR_GRADE_TRANS AS (
+    SELECT E.EMP_NO, E.EMP_NAME,
+        CASE WHEN A.AVG_SCORE >= 96 THEN 'S'
+            WHEN A.AVG_SCORE < 96 AND A.AVG_SCORE >= 90 THEN 'A'
+            WHEN A.AVG_SCORE < 90 AND A.AVG_SCORE >= 80 THEN 'B'
+            ELSE 'C'
+        END as GRADE
+    FROM HR_EMPLOYEES E
+        JOIN AVG_SCORE_TABLE A ON E.EMP_NO = A.EMP_NO
+),
+
+HR_BONUS AS (
+    SELECT G.EMP_NO,
+        CASE WHEN G.GRADE = 'S' THEN E.SAL * 0.2
+            WHEN G.GRADE = 'A' THEN E.SAL * 0.15
+            WHEN G.GRADE = 'B' THEN E.SAL * 0.1
+            ELSE 0
+        END as BONUS
+    FROM HR_GRADE_TRANS G
+        JOIN HR_EMPLOYEES E ON G.EMP_NO = E.EMP_NO
+)
+
+SELECT G.EMP_NO, G.EMP_NAME, G.GRADE, B.BONUS
+FROM HR_GRADE_TRANS G
+    JOIN HR_BONUS B ON G.EMP_NO = B.EMP_NO
+ORDER BY EMP_NO
