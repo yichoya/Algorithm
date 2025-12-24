@@ -1,46 +1,45 @@
 import sys
 from collections import deque
+input = sys.stdin.readline
 
-n, m = map(int, sys.stdin.readline().split())
-cheese = [list(map(int, sys.stdin.readline().split())) for _ in range(n)]
+n, m = map(int, input().rstrip().split())
+board = [list(map(int, input().rstrip().split())) for _ in range(n)]
+
 dxy = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+time = 0
 
-# 공기만 큐에 넣으면서 탐색
-def bfs():
+while 1:
     visited = [[False] * m for _ in range(n)]
     q = deque()
+    melt = []
+    cnt = [[0] * m for _ in range(n)]
+
     q.append((0, 0))
     visited[0][0] = True
 
     while q:
         x, y = q.popleft()
-        for dx, dy in dxy:
-            nx, ny = x + dx, y + dy
-            if nx < 0 or n <= nx or ny < 0 or m <= ny or visited[nx][ny]:
+        for i in range(4):
+            nx, ny = x + dxy[i][0], y + dxy[i][1]
+            if nx < 0 or nx >= n or ny < 0 or ny >= m:
                 continue
-            if cheese[nx][ny] >= 1:
-                cheese[nx][ny] += 1
-            else:
+            if visited[nx][ny]:
+                continue
+
+            if board[nx][ny] == 0:
                 q.append((nx, ny))
                 visited[nx][ny] = True
+            else:
+                cnt[nx][ny] += 1
+                if cnt[nx][ny] >= 2:
+                    melt.append((nx, ny))
 
-def melt():
-    cnt = 0
-    for i in range(n):
-        for j in range(m):
-            if cheese[i][j] >= 3:
-                cnt += 1
-                cheese[i][j] = 0
-            elif 0 < cheese[i][j] <= 2:
-                cheese[i][j] = 1
-    return cnt
-
-time = 0
-while True:
-    bfs()
-    melted_cheese = melt()
-    if melted_cheese:
-        time += 1
-    else:
-        print(time)
+    if not melt:
         break
+
+    for i, j in melt:
+        board[i][j] = 0
+
+    time += 1
+
+print(time)
