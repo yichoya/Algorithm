@@ -5,20 +5,19 @@ input = sys.stdin.readline
 
 n, m = map(int, input().rstrip().split())
 board = [list(map(int, sys.stdin.readline().rstrip().split())) for _ in range(n)]
-dp = [[-1] * m for _ in range(n)]
 
-def recur(x, y):
-    if x < 0 or y < 0:
-        return -12345
+dp = [[0] * m for _ in range(n)]
+dp[0][0] = board[0][0]
 
-    if x == 0 and y == 0:
-        return board[0][0]
+# 첫 번째 행, 열 채우기
+for j in range(1, m):
+    dp[0][j] = dp[0][j - 1] + board[0][j]
 
-    if dp[x][y] != -1:
-        return dp[x][y]
+for i in range(1, n):
+    dp[i][0] = dp[i - 1][0] + board[i][0]
 
-    dp[x][y] = max(recur(x - 1, y), recur(x, y - 1), recur(x - 1, y - 1)) + board[x][y]
-    return dp[x][y]
+for x in range(1, n):
+    for y in range(1, m):
+        dp[x][y] = max(dp[x - 1][y], dp[x][y - 1], dp[x - 1][y - 1]) + board[x][y]
 
-recur(n - 1, m - 1)
-print(dp[n-1][m-1])
+print(dp[n - 1][m - 1])
